@@ -1,53 +1,44 @@
 from django.db import models
 
 # Create your models here.
-class BbqParty(models.Model):
-    """
-    le groupe avec le stuff en stock
-    """
+class Nourriture(models.Model):
+    """ la bouffe """
+    nom = models.CharField(max_length=50)
+    prix = models.IntegerField(blank=False, null=False)
+
     def __str__(self):
-        return u"BbqParty"
-
-
-class Commande(models.Model):
-     """
-     les viandes des commandes
-     """
-     viandeText = models.CharField(max_length=200)
-
-     def __str__(self):
-         return viandeText
-
-class Miam(models.Model):
-     """
-     les viandes des commandes
-     """
-     viandeText = models.CharField(max_length=200)
-
-     def __str__(self):
-         return viandeText
-
-class Participant(models.Model):
-     """
-     les viandes des commandes
-     """
-     viandeText = models.CharField(max_length=200)
-
-     def __str__(self):
-         return viandeText
-
-class Stuff(models.Model):
-    """
-    Stuff donc charbon
-    """
-    nom = models.CharField(max_length=100)
-
+         return self.nom
 
 class Boisson(models.Model):
-     """
-     les viandes des commandes
-     """
-     viandeText = models.CharField(max_length=200)
+    """ la boisson """
+    nom = models.CharField(max_length=50)
+    prix = models.IntegerField(blank=False, null=False)
 
-     def __str__(self):
-         return viandeText
+    def __str__(self):
+      return self.nom
+
+class Stuff(models.Model):
+    """ le stuff """
+    nom = models.CharField(max_length=50)
+    prix = models.IntegerField(blank=False, null=False)
+
+    def __str__(self):
+        return self.nom
+
+class Participant(models.Model):
+    """ les gens """
+    nom = models.CharField(max_length=50)
+    prenom = models.CharField(max_length=50)
+    solde = models.FloatField()
+
+    def __str__(self):
+        return self.nom + self.prenom
+
+class CommandeTotal(models.Model):
+    """ les gens """
+    nom = models.CharField(max_length=50)
+    prenom = models.CharField(max_length=50)
+    solde = models.FloatField()
+
+    def __str__(self):
+        return self.nom + self.prenom
