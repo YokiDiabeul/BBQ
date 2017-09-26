@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.views import generic
 
-from .models import BbqParty, Commande, Commande, Miam, Participant, Stuff
+from .models import Boisson, Nourriture, CommandeTotal, Participant, Stuff
 
 # Create your views here.
 class IndexView(generic.ListView):
