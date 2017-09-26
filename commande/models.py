@@ -37,6 +37,9 @@ class Participant(models.Model):
          return viandeText
 
 class Stuff(models.Model):
+    """
+    Stuff donc charbon
+    """
     nom = models.CharField(max_length=100)
 
 
