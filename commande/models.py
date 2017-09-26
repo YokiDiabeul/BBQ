@@ -6,6 +6,12 @@ class Nourriture(models.Model):
     nom = models.CharField(max_length=50)
     prix = models.IntegerField(blank=False, null=False)
     quantite = models.IntegerField(null=False)
+    commandeTotal = models.ForeignKey(
+        CommandeTotal,
+        on_delete=SET_NULL,
+        blank=True,
+        null=True,
+        related_name='nourritures')
 
     def __str__(self):
          return self.nom
@@ -15,6 +21,12 @@ class Boisson(models.Model):
     nom = models.CharField(max_length=50)
     prix = models.IntegerField(blank=False, null=False)
     quantite = models.IntegerField(null=False)
+    commandeTotal = models.ForeignKey(
+        CommandeTotal,
+        on_delete=SET_NULL,
+        blank=True,
+        null=True,
+        related_name='boissons')
 
     def __str__(self):
       return self.nom
@@ -24,10 +36,6 @@ class Stuff(models.Model):
     nom = models.CharField(max_length=50)
     prix = models.IntegerField(blank=False, null=False)
     quantite = models.IntegerField(null=False)
-    commandeTotal = models.ForeignKey(
-        CommandeTotal,
-        on_delete=,
-        related_name='choices')
 
     def __str__(self):
         return self.nom
