@@ -6,7 +6,7 @@ class BbqParty(models.Model):
     le groupe avec le stuff en stock
     """
     def __str__(self):
-        return u"BbqParty"
+        return "BbqParty"
 
 
 class Commande(models.Model):

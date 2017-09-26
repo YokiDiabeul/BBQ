@@ -11,7 +11,9 @@ from .models import BbqParty, Commande, Commande, Miam, Participant, Stuff
 class IndexView(generic.ListView):
     template_name = 'index.html'
     context_object_name = '??????'
-    return HttpResponseRedirect(reverse('commande:?????', args=(question.id,)))
+    def login():
+        #if islogged() :
+        return HttpResponseRedirect(reverse('commande:index', args=(question.id,)))
 
 # def index(request):
 #     return HttpResponse("Hello, world. You're at the commande index.")
