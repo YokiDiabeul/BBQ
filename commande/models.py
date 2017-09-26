@@ -6,6 +6,7 @@ class Nourriture(models.Model):
     nom = models.CharField(max_length=50)
     prix = models.IntegerField(blank=False, null=False)
     quantite = models.IntegerField(null=False)
+    stock = models.IntegerField(null=False)
     commandeTotal = models.ForeignKey(
         CommandeTotal,
         on_delete=SET_NULL,
@@ -35,7 +36,7 @@ class Stuff(models.Model):
     """ le stuff """
     nom = models.CharField(max_length=50)
     prix = models.IntegerField(blank=False, null=False)
-    quantite = models.IntegerField(null=False)
+    stock = models.IntegerField(null=False)
 
     def __str__(self):
         return self.nom
@@ -51,7 +52,6 @@ class Participant(models.Model):
         blank=True,
         null=True,
         related_name='participants')
-
 
     def __str__(self):
         return self.nom + self.prenom
