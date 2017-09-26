@@ -8,12 +8,12 @@ from django.views import generic
 from .models import Boisson, Nourriture, CommandeTotal, Participant, Stuff
 
 # Create your views here.
-class IndexView(generic.ListView):
-    template_name = 'index.html'
-    context_object_name = '??????'
-    def login():
-        #if islogged() :
-        return HttpResponseRedirect(reverse('commande:index', args=(question.id,)))
+# class IndexView(generic.ListView):
+#     template_name = 'index.html'
+#     context_object_name = '??????'
+#     def login():
+#         #if islogged() :
+#         return HttpResponseRedirect(reverse('commande:index', args=(question.id,)))
 
-# def index(request):
-#     return HttpResponse("Hello, world. You're at the commande index.")
+def index(request):
+    return HttpResponse("Hello, world. You're at the commande index.")
