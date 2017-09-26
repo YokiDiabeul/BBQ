@@ -58,3 +58,5 @@ docs/_build/
 target/
 
 db\.sqlite3
+
+commande/migrations/0001_initial\.py
