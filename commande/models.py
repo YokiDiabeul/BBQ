@@ -1,6 +1,13 @@
 from django.db import models
 
 # Create your models here.
+class CommandeTotal(models.Model):
+    """ la CommandeTotal """
+    date = models.DateTimeField('date du bbq')
+
+    def __str__(self):
+        return date
+
 class Nourriture(models.Model):
     """ la bouffe """
     nom = models.CharField(max_length=50)
@@ -9,7 +16,7 @@ class Nourriture(models.Model):
     stock = models.IntegerField(null=False)
     commandeTotal = models.ForeignKey(
         CommandeTotal,
-        on_delete=SET_NULL,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
         related_name='nourritures')
@@ -24,7 +31,7 @@ class Boisson(models.Model):
     quantite = models.IntegerField(null=False)
     commandeTotal = models.ForeignKey(
         CommandeTotal,
-        on_delete=SET_NULL,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
         related_name='boissons')
@@ -48,17 +55,10 @@ class Participant(models.Model):
     solde = models.FloatField()
     commandeTotal = models.ForeignKey(
         CommandeTotal,
-        on_delete=SET_NULL,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
         related_name='participants')
 
     def __str__(self):
         return self.nom + self.prenom
-
-class CommandeTotal(models.Model):
-    """ la CommandeTotal """
-    date = models.DateTimeField('date du bbq')
-
-    def __str__(self):
-        return date
