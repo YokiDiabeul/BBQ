@@ -5,8 +5,6 @@ class BbqParty(models.Model):
     """
     le groupe avec le stuff en stock
     """
-    
-
     def __str__(self):
         return u"BbqParty"
 
@@ -16,19 +14,37 @@ class Commande(models.Model):
      les viandes des commandes
      """
      viandeText = models.CharField(max_length=200)
-     pubDate = models.DateTimeField('date published')
 
      def __str__(self):
-         if len(self.exempleText) > 10:
-             return self.exempleText[:11] + '...'
-         return self.exempleText
+         return viandeText
 
 class Miam(models.Model):
+     """
+     les viandes des commandes
+     """
+     viandeText = models.CharField(max_length=200)
+
+     def __str__(self):
+         return viandeText
 
 class Participant(models.Model):
+     """
+     les viandes des commandes
+     """
+     viandeText = models.CharField(max_length=200)
+
+     def __str__(self):
+         return viandeText
 
 class Stuff(models.Model):
     nom = models.CharField(max_length=100)
 
 
 class Boisson(models.Model):
+     """
+     les viandes des commandes
+     """
+     viandeText = models.CharField(max_length=200)
+
+     def __str__(self):
+         return viandeText
