@@ -1,0 +1,209 @@
+#--------------------
+#--------------------
+# Installation
+#--------------------
+#--------------------
+python3 -m venv .env #cree un environment avec django
+source .env/bin/activate #met à jour le PATH et active
+pip install django # pip install -r requirements.txt #Install les paquets requis
+pip freeze > requirements.txt # liste les packages installés dans le .txt
+
+django-admin startproject PROJECTNAME
+
+# Convertir les modèles ORM en requêtes SQL
+./manage.py makemigrations
+# Lancer les requetes sql (CRUD  tables de la BD)
+./manage.py migrate
+# Run le serv
+./manage.py runserver
+# Add un compte admin
+./manage.py createsuperuser # Mtn on peut accedee au compte admin avec 127.0.0.1:8000/admin
+
+#--------------
+# App
+#--------------
+
+# Cree une application complete
+./manage.py startapp APPNAME
+
+# dans le projet on peut modifier la vue (views.py)
+# ex:
+          from django.http import HttpResponse
+
+          def index(request):
+              return HttpResponse("Hello, world. You're at the polls index.")
+
+# ensuite on cree un fichier urls.py dans l'app avec ceci:
+          from django.conf.urls import url
+          from . import views
+
+          app_name = 'APPNAME'
+          urlpatterns = [
+              url(r'^$', views.index, name='index'),
+          ]
+# dans l'urls de PROJECTNAME on rajoute:
+          url(r'^polls/', include('polls.urls')),
+          # et on oublie pas d'import include de conf.urls
+          #(r devant les chaine de char sert à de pas comprendre les regex)
+
+#-------------------
+# Table
+#-------------------
+
+# Maintenant on va crée nos tables dans le models.py de notre app
+          class Exemple(models.Model):
+              """(Question description)"""
+              exempleText = models.CharField(max_length=200)
+              pubDate = models.DateTimeField('date published')
+
+              def __str__(self):
+                  if len(self.exempleText) > 10:
+                      return self.exempleText[:11] + '...'
+                  return self.exempleText
+# dans le settings.py de notre projet on ajoute:
+          INSTALLED_APPS = [
+              'polls.apps.PollsConfig', #cette ligne là
+
+./manage.py makemigrations
+./manage.py sqlmigrate polls 0001 #pour info (voir les requetes sql)
+./manage.py migrate
+
+# une fois fait on dois les rajouter dans admin.py de polls
+          from django.contrib import admin
+          from . import models
+
+          # Register your models here.
+          @admin.register(models.Question)
+          class QuestionAdmin(admin.ModelAdmin):
+              pass
+
+          @admin.register(models.Choice)
+          class ChoiceAdmin(admin.ModelAdmin):
+              pass
+
+# ajouter notre dossier templates en parallele de nos applications et mettre un sous dossier du nom de nos applis dedans
+# puis ajouter ceci dans le settings.py:
+          'DIRS': [os.path.join(BASE_DIR, 'templates')],
+
+# après avoir rajouter des templates, il faut Maintenant les utiliser
+# pour ça on va revenir dans views.py:
+          from django.shortcuts import render, get_object_or_404
+          from .models import Question
+
+          def index(request):
+                    questions = Question.objects.all()
+                    return render(request, "polls/index.html", {"questions":questions})
+
+          def detail(request, question_id):
+              question = get_object_or_404(Question, pk=question_id) #check if la question existe
+              return render(request, 'polls/detail.html', {'question':question})
+
+          def ....
+
+# dans le polls/urls.py r'ajouter les nouvelle pages:
+          from django.conf.urls import url
+          from . import views
+
+          app_name = 'polls'
+          urlpatterns = [
+              # ex: /polls/
+              url(r'^$', views.index, name='index'),
+              # ex: /polls/5/
+              url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
+              # ex: /polls/5/results/
+              url(r'^(?P<question_id>[0-9]+)/results/$', views.results, name='results'),
+              # ex: /polls/5/vote/
+              url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
+          ]
+# et remplacer les urls dans les html par {% url 'polls:vote' question.id %} par exemple
+
+# Dans les vues quand on manipule la bd il faut faire attention au situation de competition ou conflits de concurrence
+# par exemple si on incremente un compteur et qu'un autre utilisateur le fais aussi en meme temps il se peut qu'il y ai q'une
+# seule incrementation. Pour eviter cela on utilise F()
+          selected_choice = question.choices.get(pk=request.POST['choice'])
+          selected_choice.votes += 1
+          selected_choice.save()
+# devient
+          selected_choice = question.choices.get(pk=request.POST['choice'])
+          selected_choice.votes = F('votes')+1
+          selected_choice.save()
+
+# Maintenant on va voir si il n'y as pas moyen de virer la redondence dans les vues
+# pour cela on va utiliser des vues générique disponible avec django
+# (Normalement on regarde si il n'y a pas moyen de les utiliser dirrectement mais bon :p )
+# views.py devient:
+          from django.views import generic
+
+          class IndexView(generic.ListView):
+              template_name = 'polls/index.html'
+              context_object_name = 'questions'
+
+              def get_queryset(self):
+                  """Return all questions."""
+                  return Question.objects.all()
+
+          class DetailView(generic.DetailView):
+              model = Question
+              template_name = 'polls/detail.html'
+
+
+          class ResultsView(generic.DetailView):
+              model = Question
+              template_name = 'polls/results.html'
+# et urls.py:
+          app_name = 'polls'
+          urlpatterns = [
+              url(r'^$', views.IndexView.as_view(), name='index'),
+              url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
+              url(r'^(?P<pk>[0-9]+)/results/$', views.ResultsView.as_view(), name='results'),
+              url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
+          ]
+
+# Les test !! la partie chiante en programmation !
+# Mais grâce à django, moins chainte que prevus !!
+# Dans notre app il y a un fichier tests.py qui va nous servir
+# c'est dans ce fichier que l'on va effectuer nos test que django va faire tout seul !
+# Un gain de temps considérable donc !
+# pour nos test on à besoins de créer de class qui hérite de TestCase où l'on va mettre nos fonction de tests
+# et utiliser self.assertIs(); self.assertEqual(); self.assertContains(); self.assertQuerysetEqual(); etc
+# exemple :
+          import datetime
+          from django.utils import timezone
+          from django.test import TestCase
+          from django.urls import reverse
+
+          from .models import Question
+
+
+          def create_question(question_text, days):
+              """
+              -days for questions in the past and +days for question in the future
+              """
+              time = timezone.now() + datetime.timedelta(days=days)
+              return Question.objects.create(question_text=question_text, pub_date=time)
+
+          # Create your tests here.
+          class QuestionMethodTest(TestCase):
+
+              def test_was_published_recently_with_future_question(self):
+                  """
+                  was_published_recently() should return false for questions whose pub_date is in future.
+                  """
+                  future_question = create_question("TestFutur", 30)
+                  self.assertIs(future_question.was_published_recently(), False)
+
+              def test_was_published_recently_with_old_question(self):
+                  """
+                  was_published_recently() should return False for questions whose
+                  pub_date is older than 1 day.
+                  """
+                  old_question = create_question("TestOld", -30)
+                  self.assertIs(old_question.was_published_recently(), False)
+
+              def test_was_published_recently_with_recent_question(self):
+                  """
+                  was_published_recently() should return True for questions whose
+                  pub_date is within the last day.
+                  """
+                  recent_question = create_question("TestRecent", -0.5)
+                  self.assertIs(recent_question.was_published_recently(), True)
