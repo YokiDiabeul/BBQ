@@ -45,16 +45,20 @@ class Participant(models.Model):
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
     solde = models.FloatField()
+    commandeTotal = models.ForeignKey(
+        CommandeTotal,
+        on_delete=SET_NULL,
+        blank=True,
+        null=True,
+        related_name='participants')
 
 
     def __str__(self):
         return self.nom + self.prenom
 
 class CommandeTotal(models.Model):
-    """ les gens """
-    nom = models.CharField(max_length=50)
-    prenom = models.CharField(max_length=50)
-    solde = models.FloatField()
+    """ la CommandeTotal """
+    date = models.DateTimeField('date du bbq')
 
     def __str__(self):
-        return self.nom + self.prenom
+        return date
