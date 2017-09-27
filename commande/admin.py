@@ -1,20 +1,16 @@
 from django.contrib import admin
 from . import models
 
-@admin.register(models.CommandeTotal)
-class CommandeTotalAdmin(admin.ModelAdmin):
+@admin.register(models.Commande)
+class CommandeAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(models.Nourriture)
-class NourritureAdmin(admin.ModelAdmin):
+@admin.register(models.Produit)
+class ProduitAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(models.Boisson)
-class BoissonAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(models.Stuff)
-class StuffAdmin(admin.ModelAdmin):
+@admin.register(models.Evenement)
+class EvenementAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(models.Participant)

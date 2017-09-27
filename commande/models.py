@@ -1,64 +1,38 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+import datetime
 
-# Create your models here.
-class CommandeTotal(models.Model):
-    """ la CommandeTotal """
-    date = models.DateTimeField('date du bbq')
-
-    def __str__(self):
-        return date
-
-class Nourriture(models.Model):
-    """ la bouffe """
-    nom = models.CharField(max_length=50)
-    prix = models.IntegerField(blank=False, null=False)
-    quantite = models.IntegerField(null=False)
-    stock = models.IntegerField(null=False)
-    commandeTotal = models.ForeignKey(
-        CommandeTotal,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name='nourritures')
+class Produit(models.Model):
+    """ La boisson """
+    nom = models.CharField(max_length=100, unique=True)
+    prix = models.FloatField(blank=False, null=False)
+    stock = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-         return self.nom
+        return self.nom + " : " + self.prix + " : "+ self.stock
 
-class Boisson(models.Model):
-    """ la boisson """
-    nom = models.CharField(max_length=50)
-    prix = models.IntegerField(blank=False, null=False)
-    quantite = models.IntegerField(null=False)
-    commandeTotal = models.ForeignKey(
-        CommandeTotal,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name='boissons')
+    def _calculPrix(self, quantite):
+        return quantite * prix
 
-    def __str__(self):
-      return self.nom
-
-class Stuff(models.Model):
-    """ le stuff """
-    nom = models.CharField(max_length=50)
-    prix = models.IntegerField(blank=False, null=False)
-    stock = models.IntegerField(null=False)
-
-    def __str__(self):
-        return self.nom
+class Commande(models.Model):
+    """ La commande """
+    quantite = models.IntegerField(blank=True, null=True)
 
 class Participant(models.Model):
-    """ les gens """
-    nom = models.CharField(max_length=50)
-    prenom = models.CharField(max_length=50)
-    solde = models.FloatField()
-    commandeTotal = models.ForeignKey(
-        CommandeTotal,
+    """ Le peule """
+    ref_user = models.ForeignKey(
+        User,
         on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name='participants')
+        blank=False,
+        null=False,
+        related_name='user')
 
-    def __str__(self):
-        return self.nom + self.prenom
+    soldes = models.FloatField(blank=False, null=True)
+
+
+class Evenement(models.Model):
+    """ L'evenement """
+    date = models.DateTimeField(blank=True, default=datetime.datetime.now)
+    prixTotal = models.FloatField(blank=False, null=True)
+    participants = models.ManyToManyField(Participant)
