@@ -29,9 +29,9 @@ class Produit(models.Model):
     nom = models.CharField(max_length=100, unique=True)
     prix = models.FloatField(blank=False, null=False)
     stock = models.IntegerField(blank=True, null=True)
-
+    typeP = models.CharField(blank=False, max_length=100)
     def __str__(self):
-        return self.nom + " : " + self.prix.__str__() + "€ : "+ self.stock.__str__()+"/u"
+        return self.nom + " : "+"( "+typeP+" )" + self.prix.__str__() + "€ : "+ self.stock.__str__()+"/u"
 
     def _calculPrix(self, quantite):
         return self.quantite * self.prix.__str__()
