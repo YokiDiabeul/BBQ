@@ -10,11 +10,18 @@ class Participant(models.Model):
     user = models.OneToOneField(User, null=True)
     soldes = models.FloatField(blank=False, null=True)
 
+    def __str__(self):
+        return self.user.username
+
 class Evenement(models.Model):
     """ L'evenement """
     date = models.DateTimeField(blank=True, default=datetime.datetime.now)
     prixTotal = models.FloatField(blank=False, null=True)
     participants = models.ManyToManyField(Participant)
+
+    def __str__(self):
+        nb = len(self.participants.all())
+        return self.date.__str__() + " : " + self.prixTotal.__str__() + "€ : " + nb.__str__()
 
 
 class Produit(models.Model):
@@ -24,12 +31,15 @@ class Produit(models.Model):
     stock = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return self.nom + " : " + self.prix + " : "+ self.stock
+        return self.nom + " : " + self.prix.__str__() + "€ : "+ self.stock.__str__()+"/u"
 
     def _calculPrix(self, quantite):
-        return quantite * prix
+        return self.quantite * self.prix.__str__()
 
 class Commande(models.Model):
     """ La commande """
     quantite = models.IntegerField(blank=True, null=True)
     prod = models.OneToOneField("Produit", unique=True)
+
+    def __str__(self):
+        return self.prod.__str__() + " " + self.quantite.__str__() + "/u"
