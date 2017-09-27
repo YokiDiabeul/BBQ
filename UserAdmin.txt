@@ -1,2 +1,8 @@
 admin/boss
 studioadmin
+
+Types:
+Stuff
+Boisson
+Viande
+Nourriture
