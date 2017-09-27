@@ -7,7 +7,7 @@ import datetime
 class Participant(models.Model):
     """ Le peule """
     # You can't get a null user
-    user = models.OneToOneField(User, null=True)
+    user = models.OneToOneField(User, null=True, blank=False)
     soldes = models.FloatField(blank=False, null=True)
 
     def __str__(self):
@@ -29,9 +29,9 @@ class Produit(models.Model):
     nom = models.CharField(max_length=100, unique=True)
     prix = models.FloatField(blank=False, null=False)
     stock = models.IntegerField(blank=True, null=True)
-    typeP = models.CharField(blank=False, max_length=100)
+    typeP = models.CharField(max_length=100,null=True, blank=False)
     def __str__(self):
-        return self.nom + " : "+"( "+typeP+" )" + self.prix.__str__() + "€ : "+ self.stock.__str__()+"/u"
+        return self.nom + " : "+"( "+self.typeP+" )" + self.prix.__str__() + "€ : "+ self.stock.__str__()+"/u"
 
     def _calculPrix(self, quantite):
         return self.quantite * self.prix.__str__()
