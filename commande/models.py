@@ -6,7 +6,8 @@ import datetime
 
 class Participant(models.Model):
     """ Le peule """
-    user = models.OneToOneField(User)
+    # You can't get a null user
+    user = models.OneToOneField(User, null=True)
     soldes = models.FloatField(blank=False, null=True)
 
 class Evenement(models.Model):
